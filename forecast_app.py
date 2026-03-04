@@ -34,7 +34,7 @@ dummy_features = dummy_features.reshape(1, 7, dummy_features.shape[1])
 if st.button("Predict AQI"):
     try:
         # মডেল লোড করো
-        model = load_model('dhaka_aqi_lstm.h5')
+    model = load_model('dhaka_aqi_lstm_fixed.keras')
 
         # প্রেডিক্ট করো
         pred_scaled = model.predict(dummy_features, verbose=0)[0][0]
