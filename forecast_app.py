@@ -34,8 +34,10 @@ dummy_features = dummy_features.reshape(1, 7, dummy_features.shape[1])
 if st.button("Predict AQI"):
     try:
         # মডেল লোড করো
-        model = load_model('dhaka_aqi_lstm.h5')
+       from tensorflow.keras.models import load_model
+from tensorflow.keras.metrics import MeanSquaredError  # mse-এর জন্য
 
+model = load_model('dhaka_aqi_lstm.h5', custom_objects={'mse': MeanSquaredError()})
         # প্রেডিক্ট করো
         pred_scaled = model.predict(dummy_features, verbose=0)[0][0]
 
