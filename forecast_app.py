@@ -16,7 +16,7 @@ import pickle  # যদি scaler সেভ করা থাকে
 try:
     import streamlit as st
 except ImportError:
-    !pip install streamlit -q
+   
     import streamlit as st # Re-import after successful installation
 
 st.title("Dhaka AQI Forecaster (LSTM Model)")
