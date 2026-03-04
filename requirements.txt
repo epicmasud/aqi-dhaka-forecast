@@ -1,4 +1,4 @@
 streamlit
-tensorflow==2.15.0   # version লক করা — এটা গুরুত্বপূর্ণ
+tensorflow==2.15.0
 numpy
 pandas
