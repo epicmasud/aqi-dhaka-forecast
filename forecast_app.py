@@ -11,21 +11,22 @@ temp = st.number_input("Expected Average Temperature (°C)", 10.0, 40.0, 28.0)
 rain = st.number_input("Expected Rainfall (mm)", 0.0, 100.0, 0.0)
 
 # ডামি ফিচার — তোমার মডেলের আসল input shape অনুযায়ী অ্যাডজাস্ট করো
-# ধরে নিচ্ছি ৭ টাইমস্টেপ × ৬ ফিচার (যদি ভিন্ন হয় তাহলে model.summary() দেখে বদলাও)
+# AQI2.ipynb-এ model.input_shape দেখে নাও (যেমন (None, 7, 6) হলে 7 timesteps × 6 features)
+# এখানে ধরে নেয়া হয়েছে 7 timesteps × 6 features (temp, rain + 4 অন্য ফিচার)
 dummy_features = np.array([[temp, rain, 0, 0, 0, 0]] * 7, dtype=np.float32)
 dummy_features = dummy_features.reshape(1, 7, 6)  # shape: (1, timesteps, features)
 
 if st.button("Predict AQI"):
     try:
-        # মডেল লোড করো (custom_objects দিয়ে mse ফিক্স)
+        # মডেল লোড করো (custom_objects দিয়ে mse ডেসিরিয়ালাইজ ফিক্স)
         model = load_model('dhaka_aqi_lstm.h5', custom_objects={'mse': MeanSquaredError()})
 
         # প্রেডিক্ট করো
         pred_scaled = model.predict(dummy_features, verbose=0)[0][0]
 
         # স্কেল ব্যাক (তোমার ট্রেইনিং-এর মিন-ম্যাক্স ব্যবহার করো)
-        # এখানে ডামি স্কেলিং — আসল মিন/ম্যাক্স দিয়ে বদলাও
-        pred_aqi = pred_scaled * 350 + 30
+        # এখানে ডামি স্কেলিং — আসল মিন/ম্যাক্স দিয়ে বদলাও (যেমন scaler = MinMaxScaler(); scaler.fit(...) থেকে min/max নাও)
+        pred_aqi = pred_scaled * 350 + 30  # ডামি — আসল রেঞ্জ দিয়ে বদলাও
 
         st.success(f"**প্রেডিক্টেড AQI: {int(pred_aqi)}**")
 
