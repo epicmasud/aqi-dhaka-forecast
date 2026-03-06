@@ -4,6 +4,21 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.metrics import MeanSquaredError
 import time  # লোডিং অ্যানিমেশনের জন্য
 
+# --- Health advice function (এটা শুরুতে রাখা হয়েছে) ---
+def get_health_advice(aqi):
+    if aqi <= 50:
+        return "বাতাস ভালো — বাইরে যাওয়া সম্পূর্ণ নিরাপদ।"
+    elif aqi <= 100:
+        return "মাঝারি দূষণ — সংবেদনশীল হলে সতর্ক থাকুন।"
+    elif aqi <= 150:
+        return "অস্বাস্থ্যকর সংবেদনশীলদের জন্য — বাইরে কম যান।"
+    elif aqi <= 200:
+        return "অস্বাস্থ্যকর — N95 মাস্ক পরুন, শারীরিক পরিশ্রম কমান।"
+    elif aqi <= 300:
+        return "খুব অস্বাস্থ্যকর — বাইরে না যাওয়াই ভালো।"
+    else:
+        return "বিপজ্জনক — জরুরি অবস্থা, ঘরে থাকুন, মাস্ক পরুন।"
+
 # --- পেজ কনফিগ (প্রফেশনাল লুক) ---
 st.set_page_config(
     page_title="Dhaka AQI Forecaster",
@@ -95,7 +110,6 @@ with col1:
 if predict_button:
     with st.spinner("Analyzing weather data and predicting AQI..."):
         time.sleep(1.5)  # সিমুলেট লোডিং (অপশনাল)
-
         try:
             # মডেল লোড
             model = load_model('dhaka_aqi_lstm.h5', custom_objects={'mse': MeanSquaredError()})
@@ -152,18 +166,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# অ্যাডভাইস ফাংশন (আলাদা করে রাখা)
-def get_health_advice(aqi):
-    if aqi <= 50:
-        return "বাতাস ভালো — বাইরে যাওয়া সম্পূর্ণ নিরাপদ।"
-    elif aqi <= 100:
-        return "মাঝারি দূষণ — সংবেদনশীল হলে সতর্ক থাকুন।"
-    elif aqi <= 150:
-        return "অস্বাস্থ্যকর — সংবেদনশীল গ্রুপ বাইরে কম যান।"
-    elif aqi <= 200:
-        return "অস্বাস্থ্যকর — N95 মাস্ক পরুন, শারীরিক পরিশ্রম কমান।"
-    elif aqi <= 300:
-        return "খুব অস্বাস্থ্যকর — বাইরে না যাওয়াই ভালো।"
-    else:
-        return "বিপজ্জনক — জরুরি অবস্থা, ঘরে থাকুন, মাস্ক পরুন।"
